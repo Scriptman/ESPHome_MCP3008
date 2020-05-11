@@ -1,0 +1,46 @@
+esphome:
+  name: aquarium
+  platform: ESP8266
+  board: nodemcuv2
+  includes: 
+    - aquarium/scripts/mcp3008.h
+  libraries:
+    - https://github.com/bakercp/MCP3XXX.git
+
+wifi:
+  ssid: "IOT Wifi SSID"
+  password: "passwd"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Aquarium Fallback Hotspot"
+    password: "smfa7Mezer"
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: "passwd"
+
+ota:
+  password: "passwd"
+
+spi:
+  clk_pin: GPIO14
+  mosi_pin: GPIO13
+  miso_pin: GPIO12
+  
+sensor:
+- platform: custom
+  lambda: |-
+    auto tempSensor = new MyTempSensor();
+    App.register_component(tempSensor);
+    return {tempSensor};
+
+  sensors:
+    name: "Aquarium - Water Temperatuur"
+    accuracy_decimals: 1
+    unit_of_measurement: '°C'
